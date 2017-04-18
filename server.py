@@ -18,7 +18,8 @@ AWESOMENESS = [
 def start_here():
     """Home page."""
 
-    return "<!doctype html><html>Hi! This is the home page.</html>"
+    return """<!doctype html><html>Hi! This is the home page. <p>
+    <a href="http://localhost:5000/hello">Hello</a></p></html>"""
 
 
 @app.route('/hello')
@@ -32,11 +33,31 @@ def say_hello():
         <title>Hi There!</title>
       </head>
       <body>
-        <h1>Hi There!</h1>
+        <h1>Get compliment!</h1>
         <form action="/greet">
           What's your name? <input type="text" name="person">
+          <p>
+          Choose your compliment:
+          <select name="compliment">
+            <option value="awesome">Awesome</option>
+            <option value="smashing">Smashing</option>
+            <option value="ducky">Ducky</option>
+            <option value="neato">Neato</option>
+          </select>
           <input type="submit" value="Submit">
         </form>
+        <h1>The insult room!</h1>
+        <form action="/diss">
+        What's your name? <input type="text" name="person">
+        <p>
+        Choose your insult:
+        <select name="diss">
+          <option value="a gormless antiquarian! Thpppt!">a gormless antiquarian</option>
+          <option value="a tedious heap of parrot droppings! Fetchez la vache!!">a tedious heap of parrot droppings</option>
+          <option value="an electric donkey bottom biter!">an electric donkey bottom biter!</option>
+        </select>
+        </p>
+        <input type="submit" value="Submit">
       </body>
     </html>
     """
@@ -48,7 +69,7 @@ def greet_person():
 
     player = request.args.get("person")
 
-    compliment = choice(AWESOMENESS)
+    compliment = request.args.get("compliment")
 
     return """
     <!doctype html>
@@ -61,6 +82,29 @@ def greet_person():
       </body>
     </html>
     """.format(player=player, compliment=compliment)
+
+
+@app.route('/diss')
+def diss_person():
+
+  """Insult person."""
+
+  player = request.args.get("person")
+
+  diss = request.args.get("diss")
+
+  return """
+    <!doctype html>
+    <html>
+      <head>
+        <title>A Diss</title>
+      </head>
+      <body>
+        Hi, {player}! I think you're {diss}!
+      </body>
+    </html>
+    """.format(player=player, diss=diss)
+
 
 
 if __name__ == '__main__':
